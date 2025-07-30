@@ -39,28 +39,14 @@ runs:
         fi
       shell: bash
 
-    - name: Setup Java 11
+    - name: Setup Java
       uses: actions/setup-java@v4
-      if: ${{ steps.variables.outputs.JAVA_VERSION == '11' }}
       with:
-        java-version: 11
+        java-version: ${{ steps.variables.outputs.JAVA_VERSION }}
         distribution: zulu
 
-    - name: Setup Java 17
-      uses: actions/setup-java@v4
-      if: ${{ steps.variables.outputs.JAVA_VERSION == '17' }}
-      with:
-        java-version: 17
-        distribution: zulu
-
-    - name: Set JAVA_HOME to use Java 11
-      if: ${{ steps.variables.outputs.JAVA_VERSION == '11' }}
-      run: echo "JAVA_HOME=$(echo $JAVA_HOME_11_X64)" >> $GITHUB_ENV
-      shell: bash
-
-    - name: Set JAVA_HOME to use Java 17
-      if: ${{ steps.variables.outputs.JAVA_VERSION == '17' }}
-      run: echo "JAVA_HOME=$(echo $JAVA_HOME_17_X64)" >> $GITHUB_ENV
+    - name: Set JAVA_HOME
+      run: echo "JAVA_HOME=$(eval echo \$JAVA_HOME_${{ steps.variables.outputs.JAVA_VERSION }}_X64)" >> $GITHUB_ENV
       shell: bash
 
     - uses: dsaltares/fetch-gh-release-asset@1.1.2
